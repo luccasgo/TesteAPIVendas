@@ -15,7 +15,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import br.unifacisa.teste.domains.Produto;
+import br.unifacisa.teste.dtos.CadastrarProdutoDto;
+import br.unifacisa.teste.dtos.UpdateProdutoDto;
 import br.unifacisa.teste.services.ProdutoService;
+import javassist.NotFoundException;
 
 @Controller
 @RequestMapping("produtos")
@@ -24,13 +27,13 @@ public class ProdutoController {
 	private ProdutoService produtoService;
 	
 	@PostMapping()
-	public ResponseEntity<Produto> addProduto(@RequestBody Produto produto){
-		return new ResponseEntity <Produto> (produtoService.addProduto(produto), HttpStatus.CREATED);
+	public ResponseEntity<CadastrarProdutoDto> addProduto(@RequestBody CadastrarProdutoDto dto) throws NotFoundException{
+		return new ResponseEntity<CadastrarProdutoDto>(produtoService.addProduto(dto), HttpStatus.OK);
 	}
 	
-	@PutMapping()
-	public ResponseEntity<Produto> updateProduto(@RequestBody Produto produto){
-		return new ResponseEntity <Produto> (produtoService.updateProduto(produto), HttpStatus.OK);
+	@PutMapping("{id}")
+	public ResponseEntity<Produto> updateProduto(@PathVariable Long id ,@RequestBody UpdateProdutoDto dto) throws NotFoundException{
+		return new ResponseEntity <Produto> (produtoService.updateProduto(id, dto), HttpStatus.OK);
 	}
 	
 	@GetMapping("{id}")
@@ -51,7 +54,8 @@ public class ProdutoController {
 	
 	@GetMapping("nome")
 	public ResponseEntity <List<Produto>> readAllByNomeOrCategoria(Produto produto){
-		return new ResponseEntity <List<Produto>>(produtoService.findByNomeOrCategoria(produto), HttpStatus.OK);
+		return new ResponseEntity <List<Produto>>(produtoService.buscarProduto(produto), HttpStatus.OK);
 		
 	}
+	
 }

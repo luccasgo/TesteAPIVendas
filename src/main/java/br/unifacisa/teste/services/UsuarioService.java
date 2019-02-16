@@ -6,15 +6,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.unifacisa.teste.domains.Usuario;
+import br.unifacisa.teste.factory.UsuarioFactory;
 import br.unifacisa.teste.repositories.UsuarioRepository;
 
 @Service
 public class UsuarioService {
 	@Autowired
 	private UsuarioRepository usuarioRepository;
-
+	
 	public Usuario addUsuario(Usuario usuario) {
-		return usuarioRepository.save(usuario);
+		Usuario usuarioTemp = UsuarioFactory.setPoder(usuario);
+		return usuarioRepository.save(usuarioTemp);
 	}
 
 	public Usuario updateUsuario(Usuario usuario) {
@@ -32,4 +34,5 @@ public class UsuarioService {
 	public void deleteUsuario(Long id) {
 		usuarioRepository.deleteById(id);
 	}
+	
 }

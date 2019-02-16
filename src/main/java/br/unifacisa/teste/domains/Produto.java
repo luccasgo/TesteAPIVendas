@@ -9,22 +9,24 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
+@JsonIgnoreProperties(ignoreUnknown = false)
 public class Produto {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	@NotNull
-	String codigoDeBarras;
+	
+	private String codigoDeBarras;
 	@NotNull
 	private String nome;
 	@ManyToMany
 	private List<Categoria> categorias = new ArrayList<Categoria>();
-	@NotEmpty
 	private double qtdEstoque;
+
 	@ManyToOne
 	private TipoDeUnidade tipoDeUnidade;
 	
@@ -94,4 +96,13 @@ public class Produto {
 		this.valorUnitarioVenda = valorUnitarioVenda;
 	}
 
+	public String getCodigoDeBarras() {
+		return codigoDeBarras;
+	}
+
+	public void setCodigoDeBarras(String codigoDeBarras) {
+		this.codigoDeBarras = codigoDeBarras;
+	}
+	
+	
 }

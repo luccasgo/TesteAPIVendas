@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
+Built-By: luccas
+Build-Jdk: 10.0.2
 Implementation-Title: TreinamentoTeste
 Implementation-Version: 0.0.1-SNAPSHOT
-Built-By: lucca
 Implementation-Vendor-Id: br.unifacisa.teste
-Build-Jdk: 1.8.0_172
 Implementation-URL: https://projects.spring.io/spring-boot/#/spring-bo
  ot-starter-parent/TreinamentoTeste
 Created-By: Maven Integration for Eclipse

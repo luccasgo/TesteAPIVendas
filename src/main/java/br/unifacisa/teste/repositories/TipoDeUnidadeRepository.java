@@ -1,5 +1,11 @@
 package br.unifacisa.teste.repositories;
 
-public interface TipoDeUnidadeRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import br.unifacisa.teste.domains.TipoDeUnidade;
+
+@Repository
+public interface TipoDeUnidadeRepository extends JpaRepository<TipoDeUnidade, Long> {
 
 }

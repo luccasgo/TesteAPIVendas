@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 import br.unifacisa.teste.domains.Produto;
 @Repository
 public interface ProdutoRepository extends JpaRepository<Produto, Long> {
-
+	
 }

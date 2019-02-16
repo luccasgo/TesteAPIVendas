@@ -8,19 +8,40 @@ import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 
 import br.unifacisa.teste.domains.Produto;
+import br.unifacisa.teste.domains.Usuario;
+import br.unifacisa.teste.dtos.CadastrarProdutoDto;
+import br.unifacisa.teste.dtos.UpdateProdutoDto;
 import br.unifacisa.teste.repositories.ProdutoRepository;
+import br.unifacisa.teste.repositories.UsuarioRepository;
+import javassist.NotFoundException;
 
 @Service
 public class ProdutoService {
 	@Autowired
 	private ProdutoRepository produtoRepository;
+	@Autowired
+	private UsuarioRepository usuarioRepository;
 	
-	public Produto addProduto(Produto produto) {
-		return produtoRepository.save(produto);
+	public CadastrarProdutoDto addProduto(CadastrarProdutoDto dto) throws NotFoundException {
+		Usuario usuarioTemp = usuarioRepository.findById(dto.getUsuario_id()).orElseThrow(()-> new NotFoundException("esse usuario não existe"));
+		if(usuarioTemp.getTipoUsuario().getId() == 31 || usuarioTemp.getTipoUsuario().getId() == 32) {
+			Produto produto = new Produto();
+			produto.setNome(dto.getNome());
+			produto.setCodigoDeBarras(dto.getCodigoDeBarras());
+			produto.getCategorias().add(dto.getCategoria());
+			produtoRepository.save(produto);
+		}else {
+			throw new NotFoundException("Bad resquest");
+		}
+		return dto;
 	}
 	
-	public Produto updateProduto(Produto produto) {
-		return produtoRepository.save(produto);
+	public Produto updateProduto(Long id, UpdateProdutoDto dto) throws NotFoundException {
+		Produto produtoTemp = produtoRepository.findById(id).orElseThrow(() -> new NotFoundException("Esse produto não foi encontrado"));
+		produtoTemp.setValorUnitarioVenda(dto.getValorUnitarioVenda());
+		produtoTemp.setQtdEstoque(dto.getQtdEstoque());
+		produtoTemp.setComercializavel(dto.isComercializavel());
+		return produtoRepository.save(produtoTemp);
 	}
 	
 	public Produto readProduto(Long id) {
@@ -35,13 +56,13 @@ public class ProdutoService {
 		produtoRepository.deleteById(id);
 	}
 	
-	public List<Produto> findByNomeOrCategoria(Produto produto) {
-		ExampleMatcher matcher = ExampleMatcher.matchingAll()
+
+	public List<Produto> buscarProduto(Produto produto){
+		ExampleMatcher macther = ExampleMatcher.matchingAll()
 				.withMatcher("nome", match -> match.contains())
-				.withMatcher("categorias", match -> match.contains())
 				.withIgnoreCase()
 				.withIgnoreNullValues();
-		return produtoRepository.findAll(Example.of(produto,matcher));
+		return produtoRepository.findAll(Example.of(produto, macther));
 	}
 	
 	
